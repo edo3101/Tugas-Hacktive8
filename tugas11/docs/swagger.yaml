@@ -1,0 +1,247 @@
+definitions:
+  models.Product:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      userID:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      updated_at:
+        type: string
+    type: object
+info:
+  contact:
+    email: redhomayan@gmail.com
+    name: API Support
+  description: This is a api to add photos, comments, and store the social media of
+    users
+  license:
+    name: Apache 2.0
+  termsOfService: http://swagger.io/terms
+  title: Simple API
+  version: "1.0"
+paths:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get all existing Product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all Product success
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product Not Found
+      security:
+      - BearerAuth: []
+      summary: Get all Product
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Create Product for Product identified by given id
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: productId
+        required: true
+        type: integer
+      - description: message
+        in: query
+        name: message
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Create Product success
+          schema:
+            $ref: '#/definitions/models.Product'
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product Not Found
+      security:
+      - BearerAuth: []
+      summary: Create Product
+      tags:
+      - Product
+  /products/{productId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Product identified by given ID
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: ProductId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete Product success
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product Not Found
+      security:
+      - BearerAuth: []
+      summary: Delete Product
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      description: Get Product by ID
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get Product success
+          schema:
+            $ref: '#/definitions/models.Product'
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product Not Found
+      security:
+      - BearerAuth: []
+      summary: Get Product
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Update Product identified by given id
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update Product success
+          schema:
+            $ref: '#/definitions/models.Product'
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product Not Found
+      security:
+      - BearerAuth: []
+      summary: Update Product
+      tags:
+      - Product
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user by email
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login response
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+      summary: Login user
+      tags:
+      - user
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: full_name
+        in: query
+        name: Fullname
+        required: true
+        type: string
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Register success response
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Register user
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
